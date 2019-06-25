@@ -17,9 +17,6 @@
             "email": "vitor_esposito@hotmail.com"
         }
     ],
-    "conflict": {
-        "phpunit/php-timer": ">=2"
-    },
     "autoload": {
         "psr-4": {
             "RequestService\\": "src/"
