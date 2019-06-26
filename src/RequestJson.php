@@ -15,9 +15,14 @@ abstract class RequestJson
 		array $body = []
 	): array {
 		try {
-			$headers = $this->prepareHeader($header, $service);
+			$requestConfig = $this->getConfigValue();
+			if (!isset($requestConfig[$service])) {
+				throw new \Exception('Service config not found', 422);
+			}
+
+			$headers = $this->prepareHeader($header);
 			$body = $this->prepareBody($body);
-			$url  = $this->getBaseUrl($service).$uri;
+			$url  = $this->prepareUrl($requestConfig[$service]['url'], $uri);
 
 			$response = $this->newGuzzle()->$method($url, array_merge($headers, $body));
 
@@ -33,7 +38,8 @@ abstract class RequestJson
 			return $response;
 		} catch (\Exception $e) {
 			return [
-				'error_code' => 500,
+				'message' => $e->getMessage() ?? 'Request error',
+				'error_code' => $e->getCode() ?? 500,
 			];
 		}
 	}
@@ -49,35 +55,46 @@ abstract class RequestJson
 		return [];
 	}
 
-	public function prepareHeader(array $header, string $service): array
+	public function prepareHeader(array $header): array
 	{
 		return [
 			'headers' => array_merge(
 				[
 					'Content-Type' => 'application/json',
 					'Accept' => 'application/json',
-					'Context' => $this->getConfigValue()[$service]['context'],
 				],
 				$header
 			)
 		];
 	}
 
-	public function getBaseUrl(string $service): string
+	public function prepareUrl(string $url, string $uri): string
 	{
-		$url = $this->getConfigValue()[$service]['url'];
-		if (strpos($url, '/') === false) {
-			return "$url/";
+		$protocol = '';
+		if (strpos($url, 'http') !== false) {
+			$url = explode('//', $url);
+
+			$protocol = $url[0].'//';
+			$url = $url[1];
 		}
 
-		return $url;
+		$url = str_replace('/', '', $url);
+		$uri = str_replace('/', '', $uri);
+
+		return "$protocol$url/$uri";
 	}
 
+    /**
+     * @codeCoverageIgnore
+     */
 	public function getConfigValue(): array
 	{
 		throw new \Exception('No found config', 422);
 	}
 
+    /**
+     * @codeCoverageIgnore
+     */
 	public function newGuzzle()
 	{
 		return new Guzzle();
