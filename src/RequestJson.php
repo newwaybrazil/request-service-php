@@ -27,7 +27,7 @@ abstract class RequestJson
 
 			return json_decode($response->getBody(), true);
 		} catch (ClientException $e) {
-			if ($e->getResponse()->getStatusCode() == 401 && function_exists('unauthorized')) {
+			if ($e->getResponse()->getStatusCode() == 401) {
 				return $this->unauthorized($service, $method, $uri, $header, $body);
 			}
 
@@ -80,6 +80,18 @@ abstract class RequestJson
 	public function getConfigValue(): array
 	{
 		throw new \Exception('No found config', 422);
+	}
+
+	public function unauthorized(
+		string $service,
+		string $method,
+		string $uri,
+		array $header,
+		array $body = []
+	): array {
+		return [
+			'error_code' => 500,
+		];
 	}
 
 	public function newGuzzle()
