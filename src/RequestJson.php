@@ -7,13 +7,6 @@ use GuzzleHttp\Exception\ClientException;
 
 abstract class RequestJson
 {
-	private $guzzle;
-
-	public function __construct(Guzzle $guzzle)
-	{
-		$this->guzzle = $guzzle;
-	}
-
 	public function sendRequest(
 		string $service,
 		string $method,
@@ -26,7 +19,7 @@ abstract class RequestJson
 			$body = $this->prepareBody($body);
 			$url  = $this->getBaseUrl($service).$uri;
 
-			$response = $this->guzzle->$method($url, array_merge($headers, $body));
+			$response = $this->newGuzzle()->$method($url, array_merge($headers, $body));
 
 			if (strtolower($method) == 'delete') {
 				return [];
@@ -34,8 +27,8 @@ abstract class RequestJson
 
 			return json_decode($response->getBody(), true);
 		} catch (ClientException $e) {
-			if ($e->getResponse()->getStatusCode() == 401) {
-				$this->unauthorized();
+			if ($e->getResponse()->getStatusCode() == 401 && function_exists('unauthorized')) {
+				return $this->unauthorized($service, $method, $uri, $header, $body);
 			}
 
 			$response = json_decode($e->getResponse()->getBody(), true);
@@ -67,7 +60,7 @@ abstract class RequestJson
 				[
 					'Content-Type' => 'application/json',
 					'Accept' => 'application/json',
-					'Context' => $this->getConfigValue($service)['context'],
+					'Context' => $this->getConfigValue()[$service]['context'],
 				],
 				$header
 			)
@@ -76,7 +69,7 @@ abstract class RequestJson
 
 	public function getBaseUrl(string $service): string
 	{
-		$url = $this->getConfigValue($service)['url'];
+		$url = $this->getConfigValue()[$service]['url'];
 		if (strpos($url, '/') === false) {
 			return "$url/";
 		}
@@ -87,5 +80,10 @@ abstract class RequestJson
 	public function getConfigValue(): array
 	{
 		throw new \Exception('No found config', 422);
+	}
+
+	public function newGuzzle()
+	{
+		return new Guzzle();
 	}
 }
