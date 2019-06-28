@@ -79,9 +79,12 @@ abstract class RequestJson
 		}
 
 		$url = str_replace('/', '', $url);
-		$uri = str_replace('/', '', $uri);
 
-		return "$protocol$url/$uri";
+		if (strpos($uri, '/') === false || strpos($uri, '/') > 0) {
+			$uri = "/$uri";
+		}
+
+		return "$protocol$url$uri";
 	}
 
     /**

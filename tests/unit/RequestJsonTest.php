@@ -67,6 +67,36 @@ class RequestJsonTest extends TestCase
     	$this->assertEquals($prepareUrl, $result);
     }
 
+    /**
+     * @covers \RequestService\RequestJson::prepareUrl
+     */
+    public function testPrepareUrlWithPipeAndUriHasSubRoute()
+    {
+        $url = 'localhost/';
+        $uri = 'auth/generate';
+        $result = 'localhost/auth/generate';
+
+        $requestJson = Mockery::mock(RequestJson::class)->makePartial();
+        $prepareUrl = $requestJson->prepareUrl($url, $uri);
+
+        $this->assertEquals($prepareUrl, $result);
+    }
+
+    /**
+     * @covers \RequestService\RequestJson::prepareUrl
+     */
+    public function testPrepareUrlWithPipeAndUriHasMoreThanOnePipe()
+    {
+        $url = 'localhost/';
+        $uri = '/auth/generate';
+        $result = 'localhost/auth/generate';
+
+        $requestJson = Mockery::mock(RequestJson::class)->makePartial();
+        $prepareUrl = $requestJson->prepareUrl($url, $uri);
+
+        $this->assertEquals($prepareUrl, $result);
+    }
+
 	/**
 	 * @covers \RequestService\RequestJson::prepareUrl
 	 */
