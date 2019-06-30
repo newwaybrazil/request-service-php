@@ -128,7 +128,7 @@ class BaseRequestTest extends TestCase
     }
 
 	/**
-	 * @covers \RequestService\RequestJson::prepareUrl
+	 * @covers \RequestService\BaseRequest::prepareUrl
 	 */
     public function testPrepareUrlWithProtocol()
     {

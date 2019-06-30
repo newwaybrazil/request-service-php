@@ -7,10 +7,10 @@ use GuzzleHttp\Exception\ClientException;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 
-class RequestJsonTest extends TestCase
+class RequestTest extends TestCase
 {
     /**
-     * @covers \RequestService\RequestJson::__construct
+     * @covers \RequestService\Request::__construct
      */
     public function testCreateSendRequest()
     {
@@ -20,19 +20,20 @@ class RequestJsonTest extends TestCase
             ],
         ];
 
-        $requestJson = new RequestJson($config);
+        $requestJson = new Request($config);
 
-        $this->assertInstanceOf(RequestJson::class, $requestJson);
+        $this->assertInstanceOf(Request::class, $requestJson);
     }
 
 	/**
-	 * @covers \RequestService\RequestJson::sendRequest
+	 * @covers \RequestService\Request::sendRequest
 	 */
     public function testSendRequest()
     {
     	$config = [
     		'back' => [
 	    		'url' => 'localhost',
+                'json' => true,
     		],
     	];
 
@@ -57,7 +58,7 @@ class RequestJsonTest extends TestCase
     		->andReturn(json_encode(['response' => true]))
     		->getMock();
 
-    	$requestJson = Mockery::mock(RequestJson::class, [$config])->makePartial();
+    	$requestJson = Mockery::mock(Request::class, [$config])->makePartial();
     	$requestJson
     		->shouldReceive('newGuzzle')
     		->once()
@@ -73,14 +74,61 @@ class RequestJsonTest extends TestCase
     	$this->assertEquals($sendRequest, ['response' => true]);
     }
 
+    /**
+     * @covers \RequestService\Request::sendRequest
+     */
+    public function testSendNoJsonRequest()
+    {
+        $config = [
+            'back' => [
+                'url' => 'localhost',
+            ],
+        ];
+
+        $header = [
+            'headers' => [
+                'Context' => 'test',
+            ],
+        ];
+
+        $body = [];
+
+        $guzzleMock = Mockery::mock(Guzzle::class)
+            ->shouldReceive('get')
+            ->once()
+            ->with('localhost/auth', array_merge($header, $body))
+            ->andReturnSelf()
+            ->shouldReceive('getBody')
+            ->once()
+            ->withNoArgs()
+            ->andReturn(json_encode(['response' => true]))
+            ->getMock();
+
+        $requestJson = Mockery::mock(Request::class, [$config])->makePartial();
+        $requestJson
+            ->shouldReceive('newGuzzle')
+            ->once()
+            ->withNoArgs()
+            ->andReturn($guzzleMock)
+            ->shouldReceive('getConfigValue')
+            ->once()
+            ->withNoArgs()
+            ->andReturn($config);
+
+        $sendRequest = $requestJson->sendRequest('back', 'get', '/auth', ['Context' => 'test']);
+
+        $this->assertEquals($sendRequest, ['response' => true]);
+    }
+
 	/**
-	 * @covers \RequestService\RequestJson::sendRequest
+	 * @covers \RequestService\Request::sendRequest
 	 */
     public function testSendDeleteRequest()
     {
     	$config = [
     		'back' => [
 	    		'url' => 'localhost',
+                'json' => true,
     		],
     	];
 
@@ -105,7 +153,7 @@ class RequestJsonTest extends TestCase
     		->andReturnSelf()
     		->getMock();
 
-    	$requestJson = Mockery::mock(RequestJson::class, [$config])->makePartial();
+    	$requestJson = Mockery::mock(Request::class, [$config])->makePartial();
     	$requestJson
     		->shouldReceive('newGuzzle')
     		->once()
@@ -122,7 +170,7 @@ class RequestJsonTest extends TestCase
     }
 
 	/**
-	 * @covers \RequestService\RequestJson::sendRequest
+	 * @covers \RequestService\Request::sendRequest
 	 */
     public function testSendRequestAndNotHasConfig()
     {
@@ -133,7 +181,7 @@ class RequestJsonTest extends TestCase
 
     	$config = [];
 
-    	$requestJson = Mockery::mock(RequestJson::class)->makePartial();
+    	$requestJson = Mockery::mock(Request::class)->makePartial();
     	$requestJson
     		->shouldReceive('newGuzzle')
     		->never()
@@ -150,13 +198,14 @@ class RequestJsonTest extends TestCase
     }
 
 	/**
-	 * @covers \RequestService\RequestJson::sendRequest
+	 * @covers \RequestService\Request::sendRequest
 	 */
     public function testSendRequestException()
     {
     	$config = [
     		'back' => [
 	    		'url' => 'localhost',
+                'json' => true,
     		],
     	];
 
@@ -201,7 +250,7 @@ class RequestJsonTest extends TestCase
     		->andReturnSelf()
     		->getMock();
 
-    	$requestJson = Mockery::mock(RequestJson::class, [$config])->makePartial();
+    	$requestJson = Mockery::mock(Request::class, [$config])->makePartial();
     	$requestJson
     		->shouldReceive('newGuzzle')
     		->once()

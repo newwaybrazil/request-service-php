@@ -5,9 +5,8 @@ namespace RequestService;
 use GuzzleHttp\Client as Guzzle;
 use GuzzleHttp\Exception\ClientException;
 
-class RequestJson extends BaseRequest
+class Request extends BaseRequest
 {
-	public $jsonRequest = true;
 	private $config;
 
 	public function __construct(array $config)
@@ -26,6 +25,8 @@ class RequestJson extends BaseRequest
 			if (!isset($this->config[$service])) {
 				throw new \Exception('Service config not found', 422);
 			}
+
+			$this->jsonRequest = $this->config[$service]['json'] ?? false;
 
 			$headers = $this->prepareHeader($header);
 			$body = $this->prepareBody($body);

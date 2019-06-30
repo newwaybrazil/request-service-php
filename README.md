@@ -48,8 +48,4 @@ Second run tests
 $ vendor/bin/phpunit
 ```
 
-### Todos
-
- - Add others type of request
-
 **Free Software, Hell Yeah!**
