@@ -20,7 +20,7 @@ class Request extends BaseRequest
 		string $uri,
 		array $header = [],
 		array $body = []
-	): array {
+	) {
 		try {
 			if (!isset($this->config[$service])) {
 				throw new \Exception('Service config not found', 422);
@@ -38,7 +38,11 @@ class Request extends BaseRequest
 				return [];
 			}
 
-			return json_decode($response->getBody(), true);
+			if ($this->jsonRequest) {
+				return json_decode($response->getBody(), true);
+			}
+
+			return $response->getBody();
 		} catch (ClientException $e) {
 			return [
 				'message' => json_decode($e->getResponse()->getBody(), true),

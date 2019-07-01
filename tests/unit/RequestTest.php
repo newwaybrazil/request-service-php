@@ -101,7 +101,7 @@ class RequestTest extends TestCase
             ->shouldReceive('getBody')
             ->once()
             ->withNoArgs()
-            ->andReturn(json_encode(['response' => true]))
+            ->andReturn(['response' => true])
             ->getMock();
 
         $requestJson = Mockery::mock(Request::class, [$config])->makePartial();
