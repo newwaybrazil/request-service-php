@@ -9,11 +9,25 @@ class Request extends BaseRequest
 {
 	private $config;
 
+    /**
+     * Constructor
+     * @param array $config
+     */
 	public function __construct(array $config)
 	{
 		$this->config = $config;
 	}
 
+    /**
+     * method sendRequest
+     * send request to a specific service with params
+     * @param string $service
+     * @param string $method
+     * @param string $uri
+     * @param array $header
+     * @param array $body
+     * @return mixed
+     */
 	public function sendRequest(
 		string $service,
 		string $method,
@@ -58,6 +72,10 @@ class Request extends BaseRequest
 
     /**
      * @codeCoverageIgnore
+     * method newGuzzle
+     * create and return new GuzzleHttp\Client object
+     * (should not contain any logic, just instantiate the object and return it)
+     * @return GuzzleHttp\Client
      */
 	public function newGuzzle()
 	{
