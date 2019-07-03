@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 namespace RequestService;
 
 class BaseRequest
 {
-	public $jsonRequest = false;
+    public $jsonRequest = false;
 
     /**
      * method prepareBody
@@ -12,16 +12,16 @@ class BaseRequest
      * @param array $body
      * @return array
      */
-	public function prepareBody(array $body = []): array
-	{
-		if ($this->jsonRequest) {
-			return [
-				'json' => $body
-			];
-		}
+    public function prepareBody(array $body = []): array
+    {
+        if ($this->jsonRequest) {
+            return [
+                'json' => $body
+            ];
+        }
 
-		return $body;
-	}
+        return $body;
+    }
 
     /**
      * method prepareHeader
@@ -29,22 +29,22 @@ class BaseRequest
      * @param array $header
      * @return array
      */
-	public function prepareHeader(array $header): array
-	{
-		if ($this->jsonRequest) {
-			$header = array_merge(
-				$header,
-				[
-					'Content-Type' => 'application/json',
-					'Accept' => 'application/json',
-				]
-			);
-		}
+    public function prepareHeader(array $header): array
+    {
+        if ($this->jsonRequest) {
+            $header = array_merge(
+                $header,
+                [
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                ]
+            );
+        }
 
-		return [
-			'headers' => $header,
-		];
-	}
+        return [
+            'headers' => $header,
+        ];
+    }
 
     /**
      * method prepareUrl
@@ -53,22 +53,22 @@ class BaseRequest
      * @param string $uri
      * @return string
      */
-	public function prepareUrl(string $url, string $uri): string
-	{
-		$protocol = '';
-		if (strpos($url, 'http') !== false) {
-			$url = explode('//', $url);
+    public function prepareUrl(string $url, string $uri): string
+    {
+        $protocol = '';
+        if (strpos($url, 'http') !== false) {
+            $url = explode('//', $url);
 
-			$protocol = $url[0].'//';
-			$url = $url[1];
-		}
+            $protocol = $url[0].'//';
+            $url = $url[1];
+        }
 
-		$url = str_replace('/', '', $url);
+        $url = str_replace('/', '', $url);
 
-		if (strpos($uri, '/') === false || strpos($uri, '/') > 0) {
-			$uri = "/$uri";
-		}
+        if (strpos($uri, '/') === false || strpos($uri, '/') > 0) {
+            $uri = "/$uri";
+        }
 
-		return "$protocol$url$uri";
-	}
+        return "$protocol$url$uri";
+    }
 }

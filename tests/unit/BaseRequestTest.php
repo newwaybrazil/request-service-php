@@ -7,19 +7,19 @@ use PHPUnit\Framework\TestCase;
 
 class BaseRequestTest extends TestCase
 {
-	/**
-	 * @covers \RequestService\BaseRequest::prepareBody
-	 */
+    /**
+     * @covers \RequestService\BaseRequest::prepareBody
+     */
     public function testPrepareBody()
     {
-    	$body = [
-    		'teste' => true,
-    	];
+        $body = [
+            'teste' => true,
+        ];
 
-    	$baseRequest = new BaseRequest();
-    	$prepareBody = $baseRequest->prepareBody($body);
+        $baseRequest = new BaseRequest();
+        $prepareBody = $baseRequest->prepareBody($body);
 
-    	$this->assertEquals($prepareBody, $body);
+        $this->assertEquals($prepareBody, $body);
     }
 
     /**
@@ -27,12 +27,12 @@ class BaseRequestTest extends TestCase
      */
     public function testPrepareBodyAndNotSendValue()
     {
-    	$body = [];
+        $body = [];
 
-    	$baseRequest = new BaseRequest();
-    	$prepareBody = $baseRequest->prepareBody($body);
+        $baseRequest = new BaseRequest();
+        $prepareBody = $baseRequest->prepareBody($body);
 
-    	$this->assertEquals($prepareBody, $body);
+        $this->assertEquals($prepareBody, $body);
     }
 
     /**
@@ -52,34 +52,34 @@ class BaseRequestTest extends TestCase
         $this->assertEquals($prepareBody, ['json' => $body]);
     }
 
-	/**
-	 * @covers \RequestService\BaseRequest::prepareUrl
-	 */
+    /**
+     * @covers \RequestService\BaseRequest::prepareUrl
+     */
     public function testPrepareUrlAndUriWithPipe()
     {
-    	$url = 'localhost/';
-    	$uri = '/auth';
-    	$result = 'localhost/auth';
+        $url = 'localhost/';
+        $uri = '/auth';
+        $result = 'localhost/auth';
 
-    	$baseRequest = new BaseRequest();
-    	$prepareUrl = $baseRequest->prepareUrl($url, $uri);
+        $baseRequest = new BaseRequest();
+        $prepareUrl = $baseRequest->prepareUrl($url, $uri);
 
-    	$this->assertEquals($prepareUrl, $result);
+        $this->assertEquals($prepareUrl, $result);
     }
 
-	/**
-	 * @covers \RequestService\BaseRequest::prepareUrl
-	 */
+    /**
+     * @covers \RequestService\BaseRequest::prepareUrl
+     */
     public function testPrepareUrlWithPipeAndUriNotHasPipe()
     {
-    	$url = 'localhost/';
-    	$uri = 'auth';
-    	$result = 'localhost/auth';
+        $url = 'localhost/';
+        $uri = 'auth';
+        $result = 'localhost/auth';
 
-    	$baseRequest = new BaseRequest();
-    	$prepareUrl = $baseRequest->prepareUrl($url, $uri);
+        $baseRequest = new BaseRequest();
+        $prepareUrl = $baseRequest->prepareUrl($url, $uri);
 
-    	$this->assertEquals($prepareUrl, $result);
+        $this->assertEquals($prepareUrl, $result);
     }
 
     /**
@@ -112,70 +112,70 @@ class BaseRequestTest extends TestCase
         $this->assertEquals($prepareUrl, $result);
     }
 
-	/**
-	 * @covers \RequestService\BaseRequest::prepareUrl
-	 */
+    /**
+     * @covers \RequestService\BaseRequest::prepareUrl
+     */
     public function testPrepareUrlNotHasPipeAndUriHasPipe()
     {
-    	$url = 'localhost';
-    	$uri = '/auth';
-    	$result = 'localhost/auth';
+        $url = 'localhost';
+        $uri = '/auth';
+        $result = 'localhost/auth';
 
-    	$baseRequest = new BaseRequest();
-    	$prepareUrl = $baseRequest->prepareUrl($url, $uri);
+        $baseRequest = new BaseRequest();
+        $prepareUrl = $baseRequest->prepareUrl($url, $uri);
 
-    	$this->assertEquals($prepareUrl, $result);
+        $this->assertEquals($prepareUrl, $result);
     }
 
-	/**
-	 * @covers \RequestService\BaseRequest::prepareUrl
-	 */
+    /**
+     * @covers \RequestService\BaseRequest::prepareUrl
+     */
     public function testPrepareUrlWithProtocol()
     {
-    	$url = 'http://localhost/';
-    	$uri = '/auth';
-    	$result = 'http://localhost/auth';
+        $url = 'http://localhost/';
+        $uri = '/auth';
+        $result = 'http://localhost/auth';
 
-    	$baseRequest = new BaseRequest();
-    	$prepareUrl = $baseRequest->prepareUrl($url, $uri);
+        $baseRequest = new BaseRequest();
+        $prepareUrl = $baseRequest->prepareUrl($url, $uri);
 
-    	$this->assertEquals($prepareUrl, $result);
+        $this->assertEquals($prepareUrl, $result);
     }
 
-	/**
-	 * @covers \RequestService\BaseRequest::prepareUrl
-	 */
+    /**
+     * @covers \RequestService\BaseRequest::prepareUrl
+     */
     public function testPrepareUrlWithSecurityProtocol()
     {
-    	$url = 'https://localhost/';
-    	$uri = '/auth';
-    	$result = 'https://localhost/auth';
+        $url = 'https://localhost/';
+        $uri = '/auth';
+        $result = 'https://localhost/auth';
 
-    	$baseRequest = new BaseRequest();
-    	$prepareUrl = $baseRequest->prepareUrl($url, $uri);
+        $baseRequest = new BaseRequest();
+        $prepareUrl = $baseRequest->prepareUrl($url, $uri);
 
-    	$this->assertEquals($prepareUrl, $result);
+        $this->assertEquals($prepareUrl, $result);
     }
 
-	/**
-	 * @covers \RequestService\BaseRequest::prepareHeader
-	 */
+    /**
+     * @covers \RequestService\BaseRequest::prepareHeader
+     */
     public function testPrepareHeader()
     {
-    	$header = [
-    		'Context' => 'teste',
-    	];
+        $header = [
+            'Context' => 'teste',
+        ];
 
-    	$result = [
-    		'headers' => [
-				'Context' => 'teste',
-			],
-    	];
+        $result = [
+            'headers' => [
+                'Context' => 'teste',
+            ],
+        ];
 
-    	$baseRequest = new BaseRequest();
-    	$prepareHeader = $baseRequest->prepareHeader($header);
+        $baseRequest = new BaseRequest();
+        $prepareHeader = $baseRequest->prepareHeader($header);
 
-    	$this->assertEquals($prepareHeader, $result);
+        $this->assertEquals($prepareHeader, $result);
     }
 
     /**

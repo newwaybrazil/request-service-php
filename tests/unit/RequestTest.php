@@ -25,53 +25,53 @@ class RequestTest extends TestCase
         $this->assertInstanceOf(Request::class, $requestJson);
     }
 
-	/**
-	 * @covers \RequestService\Request::sendRequest
-	 */
+    /**
+     * @covers \RequestService\Request::sendRequest
+     */
     public function testSendRequest()
     {
-    	$config = [
-    		'back' => [
-	    		'url' => 'localhost',
+        $config = [
+            'back' => [
+                'url' => 'localhost',
                 'json' => true,
-    		],
-    	];
+            ],
+        ];
 
-    	$header = [
-    		'headers' => [
-				'Content-Type' => 'application/json',
-				'Accept' => 'application/json',
-				'Context' => 'test',
-    		],
-    	];
+        $header = [
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Context' => 'test',
+            ],
+        ];
 
-    	$body = ['json' => []];
+        $body = ['json' => []];
 
-    	$guzzleMock = Mockery::mock(Guzzle::class)
-    		->shouldReceive('get')
-    		->once()
-    		->with('localhost/auth', array_merge($header, $body))
-    		->andReturnSelf()
-    		->shouldReceive('getBody')
-    		->once()
-    		->withNoArgs()
-    		->andReturn(json_encode(['response' => true]))
-    		->getMock();
+        $guzzleMock = Mockery::mock(Guzzle::class)
+            ->shouldReceive('get')
+            ->once()
+            ->with('localhost/auth', array_merge($header, $body))
+            ->andReturnSelf()
+            ->shouldReceive('getBody')
+            ->once()
+            ->withNoArgs()
+            ->andReturn(json_encode(['response' => true]))
+            ->getMock();
 
-    	$requestJson = Mockery::mock(Request::class, [$config])->makePartial();
-    	$requestJson
-    		->shouldReceive('newGuzzle')
-    		->once()
-    		->withNoArgs()
-    		->andReturn($guzzleMock)
-    		->shouldReceive('getConfigValue')
-    		->once()
-    		->withNoArgs()
-    		->andReturn($config);
+        $requestJson = Mockery::mock(Request::class, [$config])->makePartial();
+        $requestJson
+            ->shouldReceive('newGuzzle')
+            ->once()
+            ->withNoArgs()
+            ->andReturn($guzzleMock)
+            ->shouldReceive('getConfigValue')
+            ->once()
+            ->withNoArgs()
+            ->andReturn($config);
 
-    	$sendRequest = $requestJson->sendRequest('back', 'get', '/auth', ['Context' => 'test']);
+        $sendRequest = $requestJson->sendRequest('back', 'get', '/auth', ['Context' => 'test']);
 
-    	$this->assertEquals($sendRequest, ['response' => true]);
+        $this->assertEquals($sendRequest, ['response' => true]);
     }
 
     /**
@@ -120,149 +120,149 @@ class RequestTest extends TestCase
         $this->assertEquals($sendRequest, ['response' => true]);
     }
 
-	/**
-	 * @covers \RequestService\Request::sendRequest
-	 */
+    /**
+     * @covers \RequestService\Request::sendRequest
+     */
     public function testSendDeleteRequest()
     {
-    	$config = [
-    		'back' => [
-	    		'url' => 'localhost',
+        $config = [
+            'back' => [
+                'url' => 'localhost',
                 'json' => true,
-    		],
-    	];
+            ],
+        ];
 
-    	$header = [
-    		'headers' => [
-				'Content-Type' => 'application/json',
-				'Accept' => 'application/json',
-				'Context' => 'test',
-    		],
-    	];
+        $header = [
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Context' => 'test',
+            ],
+        ];
 
-    	$body = ['json' => []];
+        $body = ['json' => []];
 
-    	$guzzleMock = Mockery::mock(Guzzle::class)
-    		->shouldReceive('delete')
-    		->once()
-    		->with('localhost/auth', array_merge($header, $body))
-    		->andReturn([])
-    		->shouldReceive('getBody')
-    		->never()
-    		->withNoArgs()
-    		->andReturnSelf()
-    		->getMock();
+        $guzzleMock = Mockery::mock(Guzzle::class)
+            ->shouldReceive('delete')
+            ->once()
+            ->with('localhost/auth', array_merge($header, $body))
+            ->andReturn([])
+            ->shouldReceive('getBody')
+            ->never()
+            ->withNoArgs()
+            ->andReturnSelf()
+            ->getMock();
 
-    	$requestJson = Mockery::mock(Request::class, [$config])->makePartial();
-    	$requestJson
-    		->shouldReceive('newGuzzle')
-    		->once()
-    		->withNoArgs()
-    		->andReturn($guzzleMock)
-    		->shouldReceive('getConfigValue')
-    		->once()
-    		->withNoArgs()
-    		->andReturn($config);
+        $requestJson = Mockery::mock(Request::class, [$config])->makePartial();
+        $requestJson
+            ->shouldReceive('newGuzzle')
+            ->once()
+            ->withNoArgs()
+            ->andReturn($guzzleMock)
+            ->shouldReceive('getConfigValue')
+            ->once()
+            ->withNoArgs()
+            ->andReturn($config);
 
-    	$sendRequest = $requestJson->sendRequest('back', 'delete', '/auth', ['Context' => 'test']);
+        $sendRequest = $requestJson->sendRequest('back', 'delete', '/auth', ['Context' => 'test']);
 
-    	$this->assertEquals($sendRequest, []);
+        $this->assertEquals($sendRequest, []);
     }
 
-	/**
-	 * @covers \RequestService\Request::sendRequest
-	 */
+    /**
+     * @covers \RequestService\Request::sendRequest
+     */
     public function testSendRequestAndNotHasConfig()
     {
-    	$exception = [
-    		'message' => 'Service config not found',
-    		'error_code' => 422,
-    	];
+        $exception = [
+            'message' => 'Service config not found',
+            'error_code' => 422,
+        ];
 
-    	$config = [];
+        $config = [];
 
-    	$requestJson = Mockery::mock(Request::class)->makePartial();
-    	$requestJson
-    		->shouldReceive('newGuzzle')
-    		->never()
-    		->withNoArgs()
-    		->andReturnSelf()
-    		->shouldReceive('getConfigValue')
-    		->once()
-    		->withNoArgs()
-    		->andReturn($config);
+        $requestJson = Mockery::mock(Request::class)->makePartial();
+        $requestJson
+            ->shouldReceive('newGuzzle')
+            ->never()
+            ->withNoArgs()
+            ->andReturnSelf()
+            ->shouldReceive('getConfigValue')
+            ->once()
+            ->withNoArgs()
+            ->andReturn($config);
 
-    	$sendRequest = $requestJson->sendRequest('back', 'get', '/auth', ['Context' => 'test']);
+        $sendRequest = $requestJson->sendRequest('back', 'get', '/auth', ['Context' => 'test']);
 
-    	$this->assertEquals($sendRequest, $exception);
+        $this->assertEquals($sendRequest, $exception);
     }
 
-	/**
-	 * @covers \RequestService\Request::sendRequest
-	 */
+    /**
+     * @covers \RequestService\Request::sendRequest
+     */
     public function testSendRequestException()
     {
-    	$config = [
-    		'back' => [
-	    		'url' => 'localhost',
+        $config = [
+            'back' => [
+                'url' => 'localhost',
                 'json' => true,
-    		],
-    	];
+            ],
+        ];
 
-    	$header = [
-    		'headers' => [
-				'Content-Type' => 'application/json',
-				'Accept' => 'application/json',
-				'Context' => 'test',
-    		],
-    	];
+        $header = [
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Context' => 'test',
+            ],
+        ];
 
-    	$body = ['json' => []];
+        $body = ['json' => []];
 
-    	$exception = [
-    		'message' => ['response' => 'Missing Authorization'],
-    		'error_code' => 401,
-    	];
+        $exception = [
+            'message' => ['response' => 'Missing Authorization'],
+            'error_code' => 401,
+        ];
 
-    	$clientExceptionMock = Mockery::mock(ClientException::class)
-    		->shouldReceive('getResponse')
-    		->twice()
-    		->withNoArgs()
-    		->andReturnSelf()
-    		->shouldReceive('getBody')
-    		->once()
-    		->withNoArgs()
-    		->andReturn(json_encode(['response' => 'Missing Authorization']))
-    		->shouldReceive('getStatusCode')
-    		->once()
-    		->withNoArgs()
-    		->andReturn(401)
-    		->getMock();
+        $clientExceptionMock = Mockery::mock(ClientException::class)
+            ->shouldReceive('getResponse')
+            ->twice()
+            ->withNoArgs()
+            ->andReturnSelf()
+            ->shouldReceive('getBody')
+            ->once()
+            ->withNoArgs()
+            ->andReturn(json_encode(['response' => 'Missing Authorization']))
+            ->shouldReceive('getStatusCode')
+            ->once()
+            ->withNoArgs()
+            ->andReturn(401)
+            ->getMock();
 
-    	$guzzleMock = Mockery::mock(Guzzle::class)
-    		->shouldReceive('get')
-    		->once()
-    		->with('localhost/auth', array_merge($header, $body))
-    		->andThrow($clientExceptionMock)
-    		->shouldReceive('getBody')
-    		->never()
-    		->withNoArgs()
-    		->andReturnSelf()
-    		->getMock();
+        $guzzleMock = Mockery::mock(Guzzle::class)
+            ->shouldReceive('get')
+            ->once()
+            ->with('localhost/auth', array_merge($header, $body))
+            ->andThrow($clientExceptionMock)
+            ->shouldReceive('getBody')
+            ->never()
+            ->withNoArgs()
+            ->andReturnSelf()
+            ->getMock();
 
-    	$requestJson = Mockery::mock(Request::class, [$config])->makePartial();
-    	$requestJson
-    		->shouldReceive('newGuzzle')
-    		->once()
-    		->withNoArgs()
-    		->andReturn($guzzleMock)
-    		->shouldReceive('getConfigValue')
-    		->once()
-    		->withNoArgs()
-    		->andReturn($config);
+        $requestJson = Mockery::mock(Request::class, [$config])->makePartial();
+        $requestJson
+            ->shouldReceive('newGuzzle')
+            ->once()
+            ->withNoArgs()
+            ->andReturn($guzzleMock)
+            ->shouldReceive('getConfigValue')
+            ->once()
+            ->withNoArgs()
+            ->andReturn($config);
 
-    	$sendRequest = $requestJson->sendRequest('back', 'get', '/auth', ['Context' => 'test']);
+        $sendRequest = $requestJson->sendRequest('back', 'get', '/auth', ['Context' => 'test']);
 
-    	$this->assertEquals($sendRequest, $exception);
+        $this->assertEquals($sendRequest, $exception);
     }
 }
