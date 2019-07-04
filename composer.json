@@ -1,5 +1,5 @@
 {
-    "name": "espositovitor/request-service-php",
+    "name": "newwaybrazil/request-service-php",
     "description": "PHP library using Guzzle base to send request to any services",
     "version": "1.0.0",
     "type": "library",
@@ -15,8 +15,8 @@
     },
     "authors": [
         {
-            "name": "Vitor Espósito",
-            "email": "vitor_esposito@hotmail.com"
+            "name": "New Way Brazil",
+            "email": "opensource@gruponewway.com.br"
         }
     ],
     "autoload": {
