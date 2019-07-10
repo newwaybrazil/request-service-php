@@ -28,12 +28,11 @@ class RequestTest extends TestCase
     /**
      * @covers \RequestService\Request::sendRequest
      */
-    public function testSendRequest()
+    public function testSendRequestJson()
     {
         $config = [
             'back' => [
                 'url' => 'localhost',
-                'json' => true,
             ],
         ];
 
@@ -82,6 +81,7 @@ class RequestTest extends TestCase
         $config = [
             'back' => [
                 'url' => 'localhost',
+                'json' => false,
             ],
         ];
 

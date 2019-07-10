@@ -40,7 +40,7 @@ class Request extends BaseRequest
                 throw new \Exception('Service config not found', 422);
             }
 
-            $this->jsonRequest = $this->config[$service]['json'] ?? false;
+            $this->jsonRequest = $this->config[$service]['json'] ?? true;
 
             $headers = $this->prepareHeader($header);
             $body = $this->prepareBody($body);

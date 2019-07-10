@@ -48,4 +48,8 @@ Second run tests
 $ vendor/bin/phpunit
 ```
 
+### TODOS
+
+- Make other requests types (JSON request type already done).
+
 **Free Software, Hell Yeah!**
