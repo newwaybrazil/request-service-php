@@ -58,10 +58,10 @@ class Request extends BaseRequest
 
             return $response->getBody();
         } catch (ClientException $e) {
-            return [
-                'message' => json_decode($e->getResponse()->getBody(), true),
-                'error_code' => $e->getResponse()->getStatusCode(),
-            ];
+            $exception = json_decode($e->getResponse()->getBody(), true);
+            $exception['error_code'] = $e->getResponse()->getStatusCode();
+
+            return $exception;
         } catch (\Exception $e) {
             return [
                 'message' => $e->getMessage() ?? 'Request error',
