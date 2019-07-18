@@ -220,7 +220,7 @@ class RequestTest extends TestCase
         $body = ['json' => []];
 
         $exception = [
-            'message' => ['response' => 'Missing Authorization'],
+            'response' => 'Missing Authorization',
             'error_code' => 401,
         ];
 
