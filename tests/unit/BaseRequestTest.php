@@ -202,4 +202,66 @@ class BaseRequestTest extends TestCase
 
         $this->assertEquals($prepareHeader, $result);
     }
+
+    /**
+     * @covers \RequestService\BaseRequest::prepareHeader
+     */
+    public function testPrepareJsonHeaderWithBasicAuth()
+    {
+        $header = [
+            'auth' => [
+                'username',
+                'password',
+            ],
+            'Context' => 'teste',
+        ];
+
+        $result = [
+            'auth' => [
+                'username',
+                'password',
+            ],
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Context' => 'teste',
+            ],
+        ];
+
+        $baseRequest = new BaseRequest();
+        $baseRequest->jsonRequest = true;
+
+        $prepareHeader = $baseRequest->prepareHeader($header);
+
+        $this->assertEquals($prepareHeader, $result);
+    }
+
+    /**
+     * @covers \RequestService\BaseRequest::prepareHeader
+     */
+    public function testPrepareHeaderWithBasicAuth()
+    {
+        $header = [
+            'Context' => 'teste',
+            'auth' => [
+                'username',
+                'password',
+            ],
+        ];
+
+        $result = [
+            'auth' => [
+                'username',
+                'password',
+            ],
+            'headers' => [
+                'Context' => 'teste',
+            ],
+        ];
+
+        $baseRequest = new BaseRequest();
+        $prepareHeader = $baseRequest->prepareHeader($header);
+
+        $this->assertEquals($prepareHeader, $result);
+    }
 }
