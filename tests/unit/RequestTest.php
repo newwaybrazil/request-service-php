@@ -76,6 +76,69 @@ class RequestTest extends TestCase
     /**
      * @covers \RequestService\Request::sendRequest
      */
+    public function testSendRequestJsonWithBasicAuth()
+    {
+        $config = [
+            'back' => [
+                'url' => 'localhost',
+            ],
+        ];
+
+        $header = [
+            'auth' => [
+                'username',
+                'password',
+            ],
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Context' => 'test',
+            ],
+        ];
+
+        $body = ['json' => []];
+
+        $guzzleMock = Mockery::mock(Guzzle::class)
+            ->shouldReceive('get')
+            ->once()
+            ->with('localhost/auth', array_merge($header, $body))
+            ->andReturnSelf()
+            ->shouldReceive('getBody')
+            ->once()
+            ->withNoArgs()
+            ->andReturn(json_encode(['response' => true]))
+            ->getMock();
+
+        $requestJson = Mockery::mock(Request::class, [$config])->makePartial();
+        $requestJson
+            ->shouldReceive('newGuzzle')
+            ->once()
+            ->withNoArgs()
+            ->andReturn($guzzleMock)
+            ->shouldReceive('getConfigValue')
+            ->once()
+            ->withNoArgs()
+            ->andReturn($config);
+
+        $sendRequest = $requestJson->sendRequest(
+            'back',
+            'get',
+            '/auth',
+            [
+                'Context' => 'test',
+                'auth' => [
+                    'username',
+                    'password'
+                ]
+            ]
+        );
+
+        $this->assertEquals($sendRequest, ['response' => true]);
+    }
+
+    /**
+     * @covers \RequestService\Request::sendRequest
+     */
     public function testSendNoJsonRequest()
     {
         $config = [

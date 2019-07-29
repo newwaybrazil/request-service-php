@@ -31,19 +31,25 @@ class BaseRequest
      */
     public function prepareHeader(array $header): array
     {
-        if ($this->jsonRequest) {
-            $header = array_merge(
-                $header,
-                [
-                    'Content-Type' => 'application/json',
-                    'Accept' => 'application/json',
-                ]
-            );
+        $headers = [];
+        if (isset($header['auth'])) {
+            $headers['auth'] = $header['auth'];
+            unset($header['auth']);
         }
 
-        return [
-            'headers' => $header,
-        ];
+        $headers['headers'] = [];
+        if ($this->jsonRequest) {
+            $headers = array_merge($headers, [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                ],
+            ]);
+        }
+
+        $headers['headers'] = array_merge($headers['headers'], $header);
+
+        return $headers;
     }
 
     /**
