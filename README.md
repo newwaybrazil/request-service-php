@@ -16,7 +16,7 @@ Requires [PHP](https://php.net) 7.1.
 The recommended way to install is through Composer.
 
 ```sh
-composer require vitoresposito/php-request-service
+composer require newwaybrazil/php-request-service
 ```
 
 ### Sample
