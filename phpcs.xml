@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ruleset name="NewWay">
-	<description>New Way Coding Standard</description>
+<ruleset name="EspositoVitor">
+	<description>Esposito Vitor Coding Standard</description>
 
 	<arg value="ps" />
 	<arg name="colors" />
