@@ -1,6 +1,6 @@
 # PHP Request Service
 
-PHP library using Guzzle base to send request to any services.
+PHP library using Guzzle base to send request to any services. Good to use in microservice architecture.
 
 ### Tech
 
@@ -16,16 +16,17 @@ Requires [PHP](https://php.net) 7.1.
 The recommended way to install is through Composer.
 
 ```sh
-composer require newwaybrazil/php-request-service
+composer require newwaybrazil/request-service-php
 ```
 
 ### Sample
 
 it's a good idea to look in the sample folder to understand how it works.
-Run the file with PHP
+Run the files with PHP
 
 ```sh
 php sample/RequestSample.php
+php sample/RequestImageSample.php
 ```
 
 ### Development
@@ -34,18 +35,18 @@ Want to contribute? Great!
 
 The project using a simple code in PHP.
 Make a change in your file and be careful with your updates!
-**Any new code will only be accepted with test.**
+**Any new code will only be accepted with all viladations.**
 
-To ensure that the entire project is tested:
+To ensure that the entire project is fine:
 
 First install the dependences
 ```sh
 $ composer install
 ```
 
-Second run tests
+Second run all validations
 ```sh
-$ vendor/bin/phpunit
+$ composer check
 ```
 
 **Free Software, Hell Yeah!**

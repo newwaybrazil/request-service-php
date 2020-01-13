@@ -139,6 +139,58 @@ class RequestTest extends TestCase
     /**
      * @covers \RequestService\Request::sendRequest
      */
+    public function testFileRequestContentType()
+    {
+        $config = [
+            'back' => [
+                'url' => 'localhost',
+            ],
+        ];
+
+        $header = [
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'stream' => true,
+            ],
+        ];
+
+        $body = ['json' => []];
+
+        $guzzleMock = Mockery::mock(Guzzle::class)
+            ->shouldReceive('get')
+            ->once()
+            ->with('localhost/image', array_merge($header, $body))
+            ->andReturnSelf()
+            ->shouldReceive('getBody')
+            ->once()
+            ->withNoArgs()
+            ->andReturnSelf()
+            ->shouldReceive('getContents')
+            ->once()
+            ->withNoArgs()
+            ->andReturn('file')
+            ->getMock();
+
+        $requestJson = Mockery::mock(Request::class, [$config])->makePartial();
+        $requestJson
+            ->shouldReceive('newGuzzle')
+            ->once()
+            ->withNoArgs()
+            ->andReturn($guzzleMock)
+            ->shouldReceive('getConfigValue')
+            ->once()
+            ->withNoArgs()
+            ->andReturn($config);
+
+        $sendRequest = $requestJson->sendRequest('back', 'get', '/image', ['stream' => true,]);
+
+        $this->assertEquals($sendRequest, base64_encode('file'));
+    }
+
+    /**
+     * @covers \RequestService\Request::sendRequest
+     */
     public function testSendNoJsonRequest()
     {
         $config = [
