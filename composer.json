@@ -1,7 +1,7 @@
 {
     "name": "newwaybrazil/request-service-php",
     "description": "PHP library using Guzzle base to send request to any services",
-    "version": "1.5.1",
+    "version": "1.4.0",
     "type": "library",
     "license": "GPL-3.0-only",
     "require": {
