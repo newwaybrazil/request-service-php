@@ -2,6 +2,7 @@
 
 namespace RequestService;
 
+use Exception;
 use GuzzleHttp\Client as Guzzle;
 use GuzzleHttp\Exception\ClientException;
 
@@ -37,7 +38,7 @@ class Request extends BaseRequest
     ) {
         try {
             if (!isset($this->config[$service])) {
-                throw new \Exception('Service config not found', 422);
+                throw new Exception('Service config not found', 422);
             }
 
             $this->jsonRequest = $this->config[$service]['json'] ?? true;
@@ -47,6 +48,10 @@ class Request extends BaseRequest
             $url  = $this->prepareUrl($this->config[$service]['url'], $uri);
 
             $response = $this->newGuzzle()->$method($url, array_merge($headers, $body));
+
+            if (isset($headers['headers']['stream']) && $headers['headers']['stream']) {
+                return base64_encode($response->getBody()->getContents());
+            }
 
             if (strtolower($method) == 'delete') {
                 return [];
@@ -62,7 +67,7 @@ class Request extends BaseRequest
             $exception['error_code'] = $e->getResponse()->getStatusCode();
 
             return $exception;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return [
                 'message' => $e->getMessage() ?? 'Request error',
                 'error_code' => $e->getCode() ?? 500,
